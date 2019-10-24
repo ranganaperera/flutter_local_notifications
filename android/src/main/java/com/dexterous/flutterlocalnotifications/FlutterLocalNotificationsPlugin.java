@@ -117,13 +117,16 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
         intent.setAction(SELECT_NOTIFICATION);
         intent.putExtra(PAYLOAD, notificationDetails.payload);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationDetails.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent dismissIntent = NotificationActivity.getDismissIntent(notificationDetails.id, context);
         DefaultStyleInformation defaultStyleInformation = (DefaultStyleInformation) notificationDetails.styleInformation;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationDetails.channelId)
                 .setContentTitle(defaultStyleInformation.htmlFormatTitle ? fromHtml(notificationDetails.title) : notificationDetails.title)
                 .setContentText(defaultStyleInformation.htmlFormatBody ? fromHtml(notificationDetails.body) : notificationDetails.body)
                 .setTicker(notificationDetails.ticker)
                 .setAutoCancel(BooleanUtils.getValue(notificationDetails.autoCancel))
-                .setContentIntent(pendingIntent)
+//                .setContentIntent(pendingIntent)
+                .addAction(getSmallIconInt(context, notificationDetails), "OK", pendingIntent)
+                .addAction(getSmallIconInt(context, notificationDetails), "CANCEL", dismissIntent)
                 .setPriority(notificationDetails.priority)
                 .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
                 .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
@@ -157,6 +160,22 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
 
             } else {
                 builder.setSmallIcon(getDrawableResourceId(context, defaultIcon));
+            }
+        }
+    }
+
+    private static int getSmallIconInt(Context context, NotificationDetails notificationDetails){
+        if (!StringUtils.isNullOrEmpty(notificationDetails.icon)) {
+            return getDrawableResourceId(context, notificationDetails.icon);
+        } else {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+            String defaultIcon = sharedPreferences.getString(DEFAULT_ICON, null);
+            if (StringUtils.isNullOrEmpty(defaultIcon)) {
+                // for backwards compatibility: this is for handling the old way references to the icon used to be kept but should be removed in future
+                return notificationDetails.iconResourceId;
+
+            } else {
+                return getDrawableResourceId(context, defaultIcon);
             }
         }
     }

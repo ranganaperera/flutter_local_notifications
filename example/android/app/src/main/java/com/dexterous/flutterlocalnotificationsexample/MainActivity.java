@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 
+import io.flutter.Log;
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;

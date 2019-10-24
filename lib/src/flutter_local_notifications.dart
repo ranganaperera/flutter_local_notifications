@@ -122,7 +122,7 @@ class FlutterLocalNotificationsPlugin {
       'title': title,
       'body': body,
       'platformSpecifics': serializedPlatformSpecifics,
-      'payload': payload ?? ''
+      'payload': payload ?? '',
     });
   }
 

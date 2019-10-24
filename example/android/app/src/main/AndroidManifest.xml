@@ -38,6 +38,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.dexterous.flutterlocalnotifications.NotificationActivity"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay"
+            android:excludeFromRecents="true">
+        </activity>
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
             <intent-filter>

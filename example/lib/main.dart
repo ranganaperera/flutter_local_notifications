@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
         0, 'plain title', 'plain body', platformChannelSpecifics,
-        payload: 'item x');
+        payload: '0123456789');
   }
 
   Future<void> _showNotificationWithNoBody() async {
@@ -550,11 +550,12 @@ class _HomePageState extends State<HomePage> {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
-
+    await _cancelNotification();
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SecondScreen(payload)),
     );
+
   }
 
   Future<void> _showOngoingNotification() async {
@@ -755,15 +756,10 @@ class SecondScreenState extends State<SecondScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Second Screen with payload: ${(_payload ?? '')}'),
+        title: Text('Note Screen'),
       ),
       body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Go back!'),
-        ),
+        child: Text(_payload),
       ),
     );
   }
